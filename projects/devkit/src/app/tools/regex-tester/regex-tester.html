@@ -1,0 +1,64 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">Regex Tester</h2>
+    <p class="tool-description">
+      Test a regular expression against a string, with optional replacement.
+    </p>
+  </header>
+
+  <div class="field">
+    <label for="regex-pattern">Pattern</label>
+    <input
+      id="regex-pattern"
+      type="text"
+      placeholder="e.g. \d+"
+      [value]="pattern()"
+      (input)="updatePattern($any($event.target).value)"
+    />
+  </div>
+
+  <div class="field">
+    <label for="regex-flags">Flags</label>
+    <input
+      id="regex-flags"
+      type="text"
+      placeholder="e.g. gi"
+      [value]="flags()"
+      (input)="updateFlags($any($event.target).value)"
+    />
+  </div>
+
+  <div class="field">
+    <label for="regex-input">Test string</label>
+    <textarea
+      id="regex-input"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    ></textarea>
+  </div>
+
+  <div class="field">
+    <label for="regex-replacement">Replacement (optional)</label>
+    <input
+      id="regex-replacement"
+      type="text"
+      [value]="replacement()"
+      (input)="updateReplacement($any($event.target).value)"
+    />
+  </div>
+
+  @if (pattern() !== '') {
+    @if (result(); as r) {
+      @if (r.ok) {
+        <p class="tool-description">{{ r.value.matches.length }} match(es)</p>
+        @if (r.value.replaced !== undefined) {
+          <div class="output-row">
+            <code class="output-value">{{ r.value.replaced }}</code>
+          </div>
+        }
+      } @else {
+        <p class="error-text">{{ r.error }}</p>
+      }
+    }
+  }
+</section>

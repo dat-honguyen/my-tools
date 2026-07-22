@@ -9,6 +9,7 @@ import { JwtDecoder } from './tools/jwt-decoder/jwt-decoder';
 import { HashGenerator } from './tools/hash-generator/hash-generator';
 import { UrlCodec } from './tools/url-codec/url-codec';
 import { CaseConverter } from './tools/case-converter/case-converter';
+import { RegexTester } from './tools/regex-tester/regex-tester';
 
 export interface ToolDefinition {
   id: string;
@@ -27,4 +28,5 @@ export const TOOLS: ToolDefinition[] = [
   { id: 'hash-generator', label: 'Hash Generator', component: HashGenerator },
   { id: 'url-codec', label: 'URL Encode/Decode', component: UrlCodec },
   { id: 'case-converter', label: 'Case Converter', component: CaseConverter },
+  { id: 'regex-tester', label: 'Regex Tester', component: RegexTester },
 ];
