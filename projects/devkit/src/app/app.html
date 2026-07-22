@@ -1,4 +1,32 @@
-<section class="devkit-placeholder">
-  <h1>DevKit</h1>
-  <p>Loading the DevKit toolkit…</p>
-</section>
+<div class="devkit">
+  <aside class="sidebar">
+    <input
+      type="text"
+      class="filter"
+      placeholder="Filter tools…"
+      [value]="filter()"
+      (input)="updateFilter($any($event.target).value)"
+    />
+    <ul class="tool-list">
+      @for (tool of filteredTools(); track tool.id) {
+        <li>
+          <button
+            type="button"
+            class="tool-item"
+            [class.active]="tool.id === selectedId()"
+            (click)="selectTool(tool.id)"
+          >
+            {{ tool.label }}
+          </button>
+        </li>
+      }
+    </ul>
+  </aside>
+  <main class="detail">
+    @if (selectedTool(); as tool) {
+      <ng-container [ngComponentOutlet]="tool.component"></ng-container>
+    } @else {
+      <p class="empty-state">Select a tool from the list.</p>
+    }
+  </main>
+</div>
