@@ -6,12 +6,12 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "hello-world": {
+    "devkit": {
       "projectType": "application",
       "schematics": {},
-      "root": "projects/hello-world",
-      "sourceRoot": "projects/hello-world/src",
-      "prefix": "hw",
+      "root": "projects/devkit",
+      "sourceRoot": "projects/devkit/src",
+      "prefix": "dk",
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
@@ -20,10 +20,10 @@
           },
           "configurations": {
             "production": {
-              "target": "hello-world:esbuild:production"
+              "target": "devkit:esbuild:production"
             },
             "development": {
-              "target": "hello-world:esbuild:development",
+              "target": "devkit:esbuild:development",
               "dev": true
             }
           },
@@ -32,7 +32,7 @@
         "serve": {
           "builder": "@angular-architects/native-federation:build",
           "options": {
-            "target": "hello-world:serve-original:development",
+            "target": "devkit:serve-original:development",
             "rebuildDelay": 500,
             "cacheExternalArtifacts": true,
             "dev": true,
@@ -46,15 +46,15 @@
         "esbuild": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "projects/hello-world/src/main.ts",
-            "tsConfig": "projects/hello-world/tsconfig.app.json",
+            "browser": "projects/devkit/src/main.ts",
+            "tsConfig": "projects/devkit/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "projects/hello-world/public"
+                "input": "projects/devkit/public"
               }
             ],
-            "styles": ["projects/hello-world/src/styles.css"],
+            "styles": ["projects/devkit/src/styles.css"],
             "polyfills": ["es-module-shims"]
           },
           "configurations": {
@@ -85,10 +85,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "hello-world:esbuild:production"
+              "buildTarget": "devkit:esbuild:production"
             },
             "development": {
-              "buildTarget": "hello-world:esbuild:development"
+              "buildTarget": "devkit:esbuild:development"
             }
           },
           "defaultConfiguration": "development",

@@ -1,6 +1,6 @@
 import { initFederation } from '@angular-architects/native-federation';
 
-initFederation({ 'hello-world': './remoteEntry.json' })
+initFederation({ devkit: './remoteEntry.json' })
   .catch((err) => console.error(err))
   .then((_) => import('./bootstrap'))
   .catch((err) => console.error(err));

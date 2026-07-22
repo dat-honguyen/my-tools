@@ -20,7 +20,7 @@ jobs:
     env:
       # Space-separated list of MFE projects to build and publish.
       # Add a new project name here as more remotes are added to the workspace.
-      PROJECTS: hello-world
+      PROJECTS: devkit
     steps:
       - uses: actions/checkout@v4
 

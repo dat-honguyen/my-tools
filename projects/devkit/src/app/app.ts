@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'hw-root',
+  selector: 'dk-root',
   imports: [],
   templateUrl: './app.html',
   styleUrl: './app.css',

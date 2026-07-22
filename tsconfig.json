@@ -22,10 +22,10 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/hello-world/tsconfig.app.json"
+      "path": "./projects/devkit/tsconfig.app.json"
     },
     {
-      "path": "./projects/hello-world/tsconfig.spec.json"
+      "path": "./projects/devkit/tsconfig.spec.json"
     }
   ]
 }

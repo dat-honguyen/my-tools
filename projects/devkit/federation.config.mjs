@@ -1,10 +1,10 @@
 import { withNativeFederation, shareAll } from '@angular-architects/native-federation/config';
 
 export default withNativeFederation({
-  name: 'hello-world',
+  name: 'devkit',
 
   exposes: {
-    './Component': './projects/hello-world/src/app/app.ts',
+    './Component': './projects/devkit/src/app/app.ts',
   },
 
   shared: {
