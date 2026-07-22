@@ -1,0 +1,39 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">Hash Generator</h2>
+    <p class="tool-description">MD5, SHA-1, and SHA-256 digests of the text below.</p>
+  </header>
+
+  <div class="field">
+    <label for="hash-input">Text</label>
+    <textarea
+      id="hash-input"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    ></textarea>
+  </div>
+
+  @if (hashes(); as h) {
+    <div class="field">
+      <label>MD5</label>
+      <div class="output-row">
+        <code class="output-value">{{ h.md5 }}</code>
+        <dk-copy-button [text]="h.md5"></dk-copy-button>
+      </div>
+    </div>
+    <div class="field">
+      <label>SHA-1</label>
+      <div class="output-row">
+        <code class="output-value">{{ h.sha1 }}</code>
+        <dk-copy-button [text]="h.sha1"></dk-copy-button>
+      </div>
+    </div>
+    <div class="field">
+      <label>SHA-256</label>
+      <div class="output-row">
+        <code class="output-value">{{ h.sha256 }}</code>
+        <dk-copy-button [text]="h.sha256"></dk-copy-button>
+      </div>
+    </div>
+  }
+</section>

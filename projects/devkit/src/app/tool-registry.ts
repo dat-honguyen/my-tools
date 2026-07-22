@@ -6,6 +6,7 @@ import { EpochConverter } from './tools/epoch-converter/epoch-converter';
 import { JsonFormatter } from './tools/json-formatter/json-formatter';
 import { Base64Tool } from './tools/base64-tool/base64-tool';
 import { JwtDecoder } from './tools/jwt-decoder/jwt-decoder';
+import { HashGenerator } from './tools/hash-generator/hash-generator';
 
 export interface ToolDefinition {
   id: string;
@@ -21,4 +22,5 @@ export const TOOLS: ToolDefinition[] = [
   { id: 'json-formatter', label: 'JSON Formatter/Validator', component: JsonFormatter },
   { id: 'base64-tool', label: 'Base64 Encode/Decode', component: Base64Tool },
   { id: 'jwt-decoder', label: 'JWT Decoder', component: JwtDecoder },
+  { id: 'hash-generator', label: 'Hash Generator', component: HashGenerator },
 ];
