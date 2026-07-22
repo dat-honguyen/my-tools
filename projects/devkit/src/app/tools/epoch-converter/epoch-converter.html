@@ -1,0 +1,58 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">Epoch / Unix Converter</h2>
+    <p class="tool-description">Convert between Unix epoch timestamps and human-readable dates.</p>
+  </header>
+
+  <div class="field">
+    <label for="epoch-input">Epoch (seconds or milliseconds)</label>
+    <input
+      id="epoch-input"
+      type="text"
+      placeholder="e.g. 1705320000"
+      [value]="epochInput()"
+      (input)="updateEpochInput($any($event.target).value)"
+    />
+  </div>
+  @if (epochInput() !== '') {
+    @if (epochResult(); as r) {
+      @if (r.ok) {
+        <div class="output-row">
+          <code class="output-value">{{ r.value.utc }}</code>
+          <dk-copy-button [text]="r.value.utc"></dk-copy-button>
+        </div>
+        <div class="output-row">
+          <code class="output-value">{{ r.value.local }}</code>
+          <dk-copy-button [text]="r.value.local"></dk-copy-button>
+        </div>
+      } @else {
+        <p class="error-text">{{ r.error }}</p>
+      }
+    }
+  }
+
+  <div class="field">
+    <label for="date-input">Date, or leave blank for now</label>
+    <input
+      id="date-input"
+      type="text"
+      placeholder="e.g. 2024-01-15T12:00:00Z"
+      [value]="dateInput()"
+      (input)="updateDateInput($any($event.target).value)"
+    />
+  </div>
+  @if (dateResult(); as r) {
+    @if (r.ok) {
+      <div class="output-row">
+        <code class="output-value">{{ r.value.seconds }}</code>
+        <dk-copy-button [text]="r.value.seconds.toString()"></dk-copy-button>
+      </div>
+      <div class="output-row">
+        <code class="output-value">{{ r.value.milliseconds }}</code>
+        <dk-copy-button [text]="r.value.milliseconds.toString()"></dk-copy-button>
+      </div>
+    } @else {
+      <p class="error-text">{{ r.error }}</p>
+    }
+  }
+</section>
