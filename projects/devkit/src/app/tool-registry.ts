@@ -8,6 +8,7 @@ import { Base64Tool } from './tools/base64-tool/base64-tool';
 import { JwtDecoder } from './tools/jwt-decoder/jwt-decoder';
 import { HashGenerator } from './tools/hash-generator/hash-generator';
 import { UrlCodec } from './tools/url-codec/url-codec';
+import { CaseConverter } from './tools/case-converter/case-converter';
 
 export interface ToolDefinition {
   id: string;
@@ -25,4 +26,5 @@ export const TOOLS: ToolDefinition[] = [
   { id: 'jwt-decoder', label: 'JWT Decoder', component: JwtDecoder },
   { id: 'hash-generator', label: 'Hash Generator', component: HashGenerator },
   { id: 'url-codec', label: 'URL Encode/Decode', component: UrlCodec },
+  { id: 'case-converter', label: 'Case Converter', component: CaseConverter },
 ];

@@ -1,0 +1,37 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">Case Converter</h2>
+    <p class="tool-description">
+      Convert text between camelCase, PascalCase, snake_case, and kebab-case.
+    </p>
+  </header>
+
+  <div class="field">
+    <label for="case-input">Text</label>
+    <input
+      id="case-input"
+      type="text"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    />
+  </div>
+
+  @if (input() !== '') {
+    <div class="output-row">
+      <code class="output-value">{{ camelCase() }}</code>
+      <dk-copy-button [text]="camelCase()"></dk-copy-button>
+    </div>
+    <div class="output-row">
+      <code class="output-value">{{ pascalCase() }}</code>
+      <dk-copy-button [text]="pascalCase()"></dk-copy-button>
+    </div>
+    <div class="output-row">
+      <code class="output-value">{{ snakeCase() }}</code>
+      <dk-copy-button [text]="snakeCase()"></dk-copy-button>
+    </div>
+    <div class="output-row">
+      <code class="output-value">{{ kebabCase() }}</code>
+      <dk-copy-button [text]="kebabCase()"></dk-copy-button>
+    </div>
+  }
+</section>
