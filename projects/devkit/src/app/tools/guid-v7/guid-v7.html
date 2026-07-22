@@ -1,0 +1,13 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">GUID v7</h2>
+    <p class="tool-description">
+      A time-ordered (version 7) UUID — sortable by creation time, per RFC 9562.
+    </p>
+  </header>
+  <div class="output-row">
+    <code class="output-value">{{ value() }}</code>
+    <dk-copy-button [text]="value()"></dk-copy-button>
+  </div>
+  <button type="button" class="action-button" (click)="regenerate()">Generate new</button>
+</section>
