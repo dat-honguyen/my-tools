@@ -1,0 +1,51 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">Date/Time Converter</h2>
+    <p class="tool-description">
+      Defaults to now. Paste an ISO date or an epoch (seconds or milliseconds) to convert it.
+    </p>
+  </header>
+
+  <div class="field">
+    <label for="dt-input">Date, or leave blank for now</label>
+    <input
+      id="dt-input"
+      type="text"
+      placeholder="e.g. 2024-01-15T12:00:00Z or 1705320000"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    />
+  </div>
+
+  <div class="field">
+    <label for="dt-timezone">Timezone</label>
+    <select
+      id="dt-timezone"
+      [value]="timeZone()"
+      (change)="updateTimeZone($any($event.target).value)"
+    >
+      @for (zone of timeZones; track zone) {
+        <option [value]="zone">{{ zone }}</option>
+      }
+    </select>
+  </div>
+
+  @if (result(); as r) {
+    @if (r.ok) {
+      <div class="output-row">
+        <code class="output-value">{{ r.value.iso }}</code>
+        <dk-copy-button [text]="r.value.iso"></dk-copy-button>
+      </div>
+      <div class="output-row">
+        <code class="output-value">{{ r.value.zoned }} ({{ timeZone() }})</code>
+        <dk-copy-button [text]="r.value.zoned"></dk-copy-button>
+      </div>
+      <div class="output-row">
+        <code class="output-value">{{ r.value.offset }}</code>
+        <dk-copy-button [text]="r.value.offset"></dk-copy-button>
+      </div>
+    } @else {
+      <p class="error-text">{{ r.error }}</p>
+    }
+  }
+</section>

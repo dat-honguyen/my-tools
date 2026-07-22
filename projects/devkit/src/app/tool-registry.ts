@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 import { GuidV4 } from './tools/guid-v4/guid-v4';
 import { GuidV7 } from './tools/guid-v7/guid-v7';
+import { DateTimeConverter } from './tools/date-time-converter/date-time-converter';
 
 export interface ToolDefinition {
   id: string;
@@ -11,4 +12,5 @@ export interface ToolDefinition {
 export const TOOLS: ToolDefinition[] = [
   { id: 'guid-v4', label: 'GUID v4', component: GuidV4 },
   { id: 'guid-v7', label: 'GUID v7', component: GuidV7 },
+  { id: 'date-time-converter', label: 'Date/Time Converter', component: DateTimeConverter },
 ];
