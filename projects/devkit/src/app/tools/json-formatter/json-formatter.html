@@ -1,0 +1,33 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">JSON Formatter/Validator</h2>
+    <p class="tool-description">Paste JSON to pretty-print, minify, or validate it.</p>
+  </header>
+
+  <div class="field">
+    <label for="json-input">JSON input</label>
+    <textarea
+      id="json-input"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    ></textarea>
+  </div>
+
+  <div class="output-row">
+    <button type="button" class="action-button" (click)="setMode('pretty')">Pretty-print</button>
+    <button type="button" class="action-button" (click)="setMode('minify')">Minify</button>
+  </div>
+
+  @if (input() !== '') {
+    @if (result(); as r) {
+      @if (r.ok) {
+        <div class="output-row">
+          <code class="output-value">{{ r.value }}</code>
+          <dk-copy-button [text]="r.value"></dk-copy-button>
+        </div>
+      } @else {
+        <p class="error-text">{{ r.error }}</p>
+      }
+    }
+  }
+</section>
