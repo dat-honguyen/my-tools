@@ -1,0 +1,33 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">URL Encode/Decode</h2>
+    <p class="tool-description">Percent-encode or decode text for use in a URL.</p>
+  </header>
+
+  <div class="output-row">
+    <button type="button" class="action-button" (click)="setDirection('encode')">Encode</button>
+    <button type="button" class="action-button" (click)="setDirection('decode')">Decode</button>
+  </div>
+
+  <div class="field">
+    <label for="url-input">Text</label>
+    <textarea
+      id="url-input"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    ></textarea>
+  </div>
+
+  @if (input() !== '') {
+    @if (result(); as r) {
+      @if (r.ok) {
+        <div class="output-row">
+          <code class="output-value">{{ r.value }}</code>
+          <dk-copy-button [text]="r.value"></dk-copy-button>
+        </div>
+      } @else {
+        <p class="error-text">{{ r.error }}</p>
+      }
+    }
+  }
+</section>
