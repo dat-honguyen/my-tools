@@ -1,0 +1,38 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">JWT Decoder</h2>
+    <p class="tool-description">Decodes a JWT's header and payload. Signature is not verified.</p>
+  </header>
+
+  <div class="field">
+    <label for="jwt-input">JWT</label>
+    <textarea
+      id="jwt-input"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    ></textarea>
+  </div>
+
+  @if (input() !== '') {
+    @if (result(); as r) {
+      @if (r.ok) {
+        <div class="field">
+          <label>Header</label>
+          <div class="output-row">
+            <code class="output-value">{{ format(r.value.header) }}</code>
+            <dk-copy-button [text]="format(r.value.header)"></dk-copy-button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Payload</label>
+          <div class="output-row">
+            <code class="output-value">{{ format(r.value.payload) }}</code>
+            <dk-copy-button [text]="format(r.value.payload)"></dk-copy-button>
+          </div>
+        </div>
+      } @else {
+        <p class="error-text">{{ r.error }}</p>
+      }
+    }
+  }
+</section>

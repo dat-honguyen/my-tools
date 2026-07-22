@@ -5,6 +5,7 @@ import { DateTimeConverter } from './tools/date-time-converter/date-time-convert
 import { EpochConverter } from './tools/epoch-converter/epoch-converter';
 import { JsonFormatter } from './tools/json-formatter/json-formatter';
 import { Base64Tool } from './tools/base64-tool/base64-tool';
+import { JwtDecoder } from './tools/jwt-decoder/jwt-decoder';
 
 export interface ToolDefinition {
   id: string;
@@ -19,4 +20,5 @@ export const TOOLS: ToolDefinition[] = [
   { id: 'epoch-converter', label: 'Epoch / Unix Converter', component: EpochConverter },
   { id: 'json-formatter', label: 'JSON Formatter/Validator', component: JsonFormatter },
   { id: 'base64-tool', label: 'Base64 Encode/Decode', component: Base64Tool },
+  { id: 'jwt-decoder', label: 'JWT Decoder', component: JwtDecoder },
 ];
