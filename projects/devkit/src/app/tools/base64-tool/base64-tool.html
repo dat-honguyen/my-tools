@@ -1,0 +1,33 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <h2 class="tool-title">Base64 Encode/Decode</h2>
+    <p class="tool-description">Convert text to and from Base64, safely handling UTF-8.</p>
+  </header>
+
+  <div class="output-row">
+    <button type="button" class="action-button" (click)="setDirection('encode')">Encode</button>
+    <button type="button" class="action-button" (click)="setDirection('decode')">Decode</button>
+  </div>
+
+  <div class="field">
+    <label for="base64-input">{{ direction() === 'encode' ? 'Text' : 'Base64' }}</label>
+    <textarea
+      id="base64-input"
+      [value]="input()"
+      (input)="updateInput($any($event.target).value)"
+    ></textarea>
+  </div>
+
+  @if (input() !== '') {
+    @if (result(); as r) {
+      @if (r.ok) {
+        <div class="output-row">
+          <code class="output-value">{{ r.value }}</code>
+          <dk-copy-button [text]="r.value"></dk-copy-button>
+        </div>
+      } @else {
+        <p class="error-text">{{ r.error }}</p>
+      }
+    }
+  }
+</section>

@@ -4,6 +4,7 @@ import { GuidV7 } from './tools/guid-v7/guid-v7';
 import { DateTimeConverter } from './tools/date-time-converter/date-time-converter';
 import { EpochConverter } from './tools/epoch-converter/epoch-converter';
 import { JsonFormatter } from './tools/json-formatter/json-formatter';
+import { Base64Tool } from './tools/base64-tool/base64-tool';
 
 export interface ToolDefinition {
   id: string;
@@ -17,4 +18,5 @@ export const TOOLS: ToolDefinition[] = [
   { id: 'date-time-converter', label: 'Date/Time Converter', component: DateTimeConverter },
   { id: 'epoch-converter', label: 'Epoch / Unix Converter', component: EpochConverter },
   { id: 'json-formatter', label: 'JSON Formatter/Validator', component: JsonFormatter },
+  { id: 'base64-tool', label: 'Base64 Encode/Decode', component: Base64Tool },
 ];
