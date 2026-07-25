@@ -7,6 +7,8 @@ import { createRoot, type Root } from 'react-dom/client';
 // import makes the dependency visible so it's actually shared/externalized
 // and gets an import-map entry (verified via `dist/devkit/importmap.json`).
 import 'react/jsx-runtime';
+import './styles/theme.css';
+import './styles/tool-panel.css';
 import { App } from './App';
 
 class DevkitElement extends HTMLElement {

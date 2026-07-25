@@ -34,6 +34,7 @@ async function main() {
     tsconfig: 'tsconfig.json',
     splitting: true,
     sourcemap: true,
+    loader: { '.css': 'css' },
   };
 
   if (serve) {
