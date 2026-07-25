@@ -10,7 +10,7 @@ describe('register', () => {
     const el = document.createElement('dk-devkit-app');
     document.body.appendChild(el);
     await vi.waitFor(() => {
-      expect(el.textContent).toContain('DevKit loading');
+      expect(el.textContent).toContain('datisa.dev - Universal DevKit');
     });
     el.remove();
   });
