@@ -152,7 +152,7 @@ git commit -m "Set up Nx workspace root for hybrid monorepo"
     "@softarc/native-federation": "^4.3.2"
   },
   "devDependencies": {
-    "@softarc/native-federation-esbuild": "^4.3.2",
+    "@softarc/native-federation-esbuild": "^4.0.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
