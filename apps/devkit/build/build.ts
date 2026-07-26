@@ -49,6 +49,10 @@ async function main() {
   fs.copyFileSync('index.html', path.join(outputPath, 'index.html'));
 
   await federationBuilder.build();
+
+  if (!serve) {
+    await federationBuilder.close();
+  }
 }
 
 main().catch((err) => {
