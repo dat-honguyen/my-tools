@@ -13,8 +13,8 @@ import 'react/jsx-runtime';
 // Importing the raw text lets us inject it ourselves as a `<style>`
 // element inside this element's shadow root below.
 import theme from './styles/theme.css';
-import toolPanel from './styles/tool-panel.css';
-import { App } from './App';
+import terminal from './styles/terminal.css';
+import { Terminal } from './Terminal';
 
 class DevkitElement extends HTMLElement {
   private root?: Root;
@@ -27,14 +27,14 @@ class DevkitElement extends HTMLElement {
     const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
 
     const style = document.createElement('style');
-    style.textContent = `${theme}\n${toolPanel}`;
+    style.textContent = `${theme}\n${terminal}`;
     shadow.appendChild(style);
 
     const container = document.createElement('div');
     shadow.appendChild(container);
 
     this.root = createRoot(container);
-    this.root.render(<App />);
+    this.root.render(<Terminal />);
   }
 
   disconnectedCallback(): void {
