@@ -1,13 +1,15 @@
 :host {
-  --color-bg: #0f172a;
-  --color-surface: #1e293b;
-  --color-text: #e2e8f0;
-  --color-text-muted: #64748b;
-  --color-success: #10b981;
-  --color-error: #ef4444;
-  --color-primary: #3b82f6;
-  --color-warning: #f59e0b;
-  --color-border: #334155;
+  /* Matches the "Campbell" color scheme (Windows Terminal's built-in
+     default), used by this machine's Cygwin profile. */
+  --color-bg: #0c0c0c;
+  --color-surface: #0c0c0c;
+  --color-text: #cccccc;
+  --color-text-muted: #767676;
+  --color-success: #13a10e;
+  --color-error: #c50f1f;
+  --color-primary: #3b78ff;
+  --color-warning: #f9f1a5;
+  --color-border: #404040;
   --font-main: 'Fira Code', 'Consolas', 'Monaco', monospace;
 
   display: block;
@@ -65,7 +67,7 @@
 .devkit-terminal-title {
   margin-left: auto;
   margin-right: auto;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   letter-spacing: 1px;
 }
