@@ -67,7 +67,7 @@ output is generated from `COMMANDS` (id + summary + arg names), so it never goes
 |---|---|---|
 | `guidv4` | *(none)* | `crypto.randomUUID()` (inline, same as today's `GuidV4`) |
 | `guidv7` | *(none)* | `generateUuidV7()` |
-| `hash` | `algorithm: enum[sha1,sha256]`, `text: string` | `sha('SHA-1'\|'SHA-256', text)` |
+| `hash` | `algorithm: enum[md5,sha1,sha256]`, `text: string` | `md5(text)` / `sha('SHA-1'\|'SHA-256', text)` |
 | `base64` | `mode: enum[encode,decode]`, `text: string` | `encodeBase64`/`decodeBase64` |
 | `url` | `mode: enum[encode,decode]`, `text: string` | `encodeUrl`/`decodeUrl` |
 | `case` | `mode: enum[camel,pascal,snake,kebab]`, `text: string` | `toCamelCase`/`toPascalCase`/`toSnakeCase`/`toKebabCase` |
