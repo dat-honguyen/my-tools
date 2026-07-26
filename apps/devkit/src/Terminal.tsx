@@ -1,4 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import React from 'react';
+// Destructured off the default import rather than named imports — see the
+// comment in federation.config.js on why named imports of this
+// federation-shared package don't work in production builds.
+const { useEffect, useRef, useState } = React;
 import { COMMANDS } from './commands';
 import { executeCommand } from './commands/execute-command';
 import { getCompletionCandidates, getSuggestion } from './commands/get-suggestion';

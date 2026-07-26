@@ -1,7 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
+    // Classic (not "react-jsx" automatic) transform: esbuild's automatic JSX
+    // runtime auto-injects `import { jsx, jsxs } from "react/jsx-runtime"`,
+    // and those named exports are silently `undefined` at runtime for this
+    // federation-shared package in production builds (see the comment in
+    // federation.config.js). The classic transform instead compiles JSX to
+    // `React.createElement(...)` calls, which only needs a working default
+    // import of React — verified to work correctly. Every .tsx file using
+    // JSX must import React as the default export for `React` to be in scope.
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
     "types": ["node", "@testing-library/jest-dom/vitest"]
   },
   "include": ["src", "build"]

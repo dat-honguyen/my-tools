@@ -14,27 +14,25 @@ module.exports = withNativeFederation({
     './Component': './src/register.tsx',
   },
 
+  // Named imports of federation-shared packages are unreliable here:
+  // native-federation-esbuild's CJS-export synthesis for "browser-shared"
+  // node_modules bundles emits a guard that's supposed to populate each
+  // named binding from the real required module, but under production
+  // (minified) builds that guard's backing object never actually gets
+  // populated for react / react-dom / react-dom/client / react/jsx-runtime
+  // — every named export silently resolves to `undefined` at runtime, while
+  // the `default` export (a namespace object) always has real values.
+  // Rather than work around that per-package, `jsx: 'react'` in
+  // tsconfig.json switches off the automatic JSX runtime (which auto-injects
+  // a named `{ jsx, jsxs }` import from 'react/jsx-runtime') in favor of the
+  // classic `React.createElement` transform, and our own source now imports
+  // React/ReactDOM as default imports and destructures off of that — so
+  // 'react/jsx-runtime' is no longer used anywhere and doesn't need sharing.
   shared: {
     ...shareAll({
       singleton: true,
       strictVersion: true,
       requiredVersion: 'auto',
     }),
-    // shareAll() only shares packages listed in package.json dependencies;
-    // esbuild's automatic JSX runtime emits a bare `react/jsx-runtime` import
-    // that isn't a dependency name by itself, so it must be shared explicitly
-    // or it's left as an unresolvable external with no import-map entry.
-    'react/jsx-runtime': {
-      singleton: true,
-      strictVersion: true,
-      requiredVersion: 'auto',
-      // The "ignoreUnusedDeps" optimization (on by default) prunes any
-      // shared entry it can't find a literal import for. It never finds
-      // 'react/jsx-runtime' because nothing in our source imports it by
-      // name — esbuild's automatic JSX transform injects that import after
-      // the static usage scan runs. `includeSecondaries` exempts this entry
-      // from that pruning so it survives into remoteEntry.json/importmap.json.
-      includeSecondaries: true,
-    },
   },
 });
