@@ -14,7 +14,13 @@
   word-break: break-word;
 }
 
+/* Tool results (kind: 'success') print in the default text color — most
+   output is "success", so coloring it green made everything look uniformly
+   green. Green is reserved for explicit confirmations (e.g. clipboard copy). */
 .output-line.success {
+  color: var(--color-text);
+}
+.output-line.confirm {
   color: var(--color-success);
 }
 .output-line.error {

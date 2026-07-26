@@ -10,7 +10,7 @@ const HISTORY_KEY = 'devkit:history';
 const HISTORY_LIMIT = 50;
 const PROMPT = 'datisa@devkit:~$';
 
-type OutputLine = CommandResult | { text: string; kind: 'echo' | 'warning' };
+type OutputLine = CommandResult | { text: string; kind: 'echo' | 'warning' | 'confirm' };
 
 function renderHighlighted(text: string, highlights: [number, number][] | undefined) {
   if (!highlights || highlights.length === 0) return text;
@@ -119,7 +119,7 @@ export function Terminal() {
       const copied = await copyToClipboard(copyText);
       appendOutput(
         copied
-          ? { text: '✓ Copied to clipboard!', kind: 'success' }
+          ? { text: '✓ Copied to clipboard!', kind: 'confirm' }
           : { text: 'Failed to copy to clipboard. Permission denied.', kind: 'error' },
       );
     }
