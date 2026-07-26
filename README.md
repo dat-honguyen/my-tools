@@ -14,7 +14,7 @@ Each project under `apps/` is an independent Native Federation remote, built and
 ```bash
 npm install
 npx nx serve devkit       # dev server for a given remote
-npx nx build devkit       # production build, output in dist/devkit
+npx nx build devkit       # production build, output in apps/devkit/dist/devkit
 npx nx test devkit        # unit tests (Vitest)
 
 npx nx serve coming-soon  # same, for the Angular coming-soon remote
@@ -27,8 +27,8 @@ npx nx run-many -t test   # test every project
 
 ## Adding a new MFE
 
-- **React remote** (like `devkit`): scaffold a new `apps/<name>` with its own `project.json`, `package.json`, esbuild-based `build/build.ts`, and `federation.config.mjs` (Native Federation via `@softarc/native-federation` + `@softarc/native-federation-esbuild`); expose a root component from `./Component` and register it as a Web Component tag consumed by the shell.
-- **Angular remote** (like `coming-soon`): `npx ng generate application <name> --routing=false`, then `npx ng add @angular-architects/native-federation --project <name> --type remote`, then add an Nx `project.json` for it under `apps/<name>`.
+- **React remote** (like `devkit`): scaffold a new `apps/<name>` with its own `project.json`, `package.json`, esbuild-based `build/build.ts`, and `federation.config.js` (Native Federation via `@softarc/native-federation` + `@softarc/native-federation-esbuild`); expose a root component from `./Component` and register it as a Web Component tag consumed by the shell.
+- **Angular remote** (like `coming-soon`): there's no `@nx/angular` plugin wired into this workspace and `angular.json` no longer exists, so `npx ng generate application` won't work here. Instead, manually scaffold `apps/<name>` following `apps/coming-soon`'s layout: an Angular app (`src/main.ts`, `src/bootstrap.ts`, `src/app/`, `tsconfig.app.json`, `tsconfig.spec.json`) plus an Nx `project.json` modeled on `apps/coming-soon/project.json`, wiring the `@angular-architects/native-federation:build`/`serve` executors and an `@angular/build:application` target with a `federation.config.mjs`.
 
 For either kind:
 1. Add `<name>` to the `PROJECTS` list in `.github/workflows/deploy.yml`.
