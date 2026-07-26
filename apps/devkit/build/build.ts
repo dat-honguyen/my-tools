@@ -60,13 +60,17 @@ async function run() {
     adapterConfig: {
       plugins: [],
       loader: { '.css': 'text' },
-      // The adapter defaults to a React framework plugin that hardcodes
-      // React <=18's `*.production.min.js` CJS filenames; React 19.2 renamed
-      // those to `*.production.js` (no `.min`), so the default plugin fails
-      // to resolve them. React's own `index.js` already branches on
-      // `NODE_ENV` correctly, so no framework-specific file replacement is
-      // needed here.
-      frameworks: [],
+      // The adapter's default React framework plugin bundles two things:
+      // fileReplacements (hardcodes React <=18's `*.production.min.js` CJS
+      // filenames, which React 19.2 renamed to `*.production.js` — broken)
+      // and needsCommonJsPlugin (runs react/react-dom's CJS through
+      // @chialab/esbuild-plugin-commonjs so `import { useState } from
+      // 'react'` gets a real named export instead of just a default-export
+      // namespace object — still required). Dropping the whole plugin
+      // (frameworks: []) fixed the filename issue but silently broke named
+      // exports, throwing "does not provide an export named 'useState'" at
+      // runtime. This keeps only the CJS interop, with no file replacement.
+      frameworks: [{ name: 'react-esm-interop', needsCommonJsPlugin: true }],
     },
   });
 
