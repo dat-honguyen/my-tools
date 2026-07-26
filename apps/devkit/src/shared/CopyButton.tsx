@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
-  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(resetTimer.current), []);
 

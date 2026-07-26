@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["vite/client"]
+    "types": ["node", "@testing-library/jest-dom/vitest"]
   },
   "include": ["src", "build"]
 }
