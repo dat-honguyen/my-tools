@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevKit | datisa.dev</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --term-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --prompt-color: #10b981;
+            --error-color: #ef4444;
+            --system-color: #3b82f6;
+            --highlight: #f59e0b;
+            --font-main: 'Fira Code', 'Consolas', 'Monaco', monospace;
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .terminal-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--term-bg);
+            border-radius: 10px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        .terminal-header {
+            background-color: #0f172a;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .close { background-color: #ff5f56; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #27c93f; }
+
+        .terminal-title {
+            margin-left: auto;
+            margin-right: auto;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-line {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            word-break: break-all;
+        }
+
+        .prompt {
+            color: var(--prompt-color);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .command-input {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            flex-grow: 1;
+            outline: none;
+            padding: 0;
+            caret-color: var(--highlight);
+        }
+
+        .success { color: var(--prompt-color); }
+        .error { color: var(--error-color); }
+        .system { color: var(--system-color); }
+        .warning { color: var(--highlight); }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--term-bg); }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="window-controls">
+                <div class="control close"></div>
+                <div class="control minimize"></div>
+                <div class="control maximize"></div>
+            </div>
+            <div class="terminal-title">datisa.dev - Universal DevKit</div>
+        </div>
+        
+        <div class="terminal-body" id="terminal-body">
+            <div class="output-line system">Welcome to DevKit v1.0.0</div>
+            <div class="output-line system">Type <span class="warning">help</span> to see a list of available commands.</div>
+            
+            <div id="output-container"></div>
+            
+            <div class="input-line">
+                <span class="prompt">datisa@devkit:~$</span>
+                <input type="text" class="command-input" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('cmd-input');
+        const outputContainer = document.getElementById('output-container');
+        const terminalBody = document.getElementById('terminal-body');
+
+        // Focus input when clicking anywhere on the terminal
+        terminalBody.addEventListener('click', () => input.focus());
+
+        // --- Data Generators ---
+
+        // Simple GUID v4 generator
+        function generateUUIDv4() {
+            if (crypto && crypto.randomUUID) {
+                return crypto.randomUUID();
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Simple GUID v7 generator (Timestamp based)
+        function generateUUIDv7() {
+            const timestamp = Date.now();
+            const timeHex = timestamp.toString(16).padStart(12, '0');
+            const randomHex = () => Math.floor(Math.random() * 16).toString(16);
+            
+            let uuid = timeHex.substring(0, 8) + '-' + 
+                       timeHex.substring(8, 12) + '-7' + 
+                       randomHex() + randomHex() + randomHex() + '-' +
+                       ((Math.floor(Math.random() * 4) + 8).toString(16)) + randomHex() + randomHex() + randomHex() + '-' +
+                       Array.from({length: 12}, randomHex).join('');
+            return uuid;
+        }
+
+        // Copy to clipboard helper
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    textArea.remove();
+                    return true;
+                } catch (e) {
+                    textArea.remove();
+                    return false;
+                }
+            }
+        }
+
+        // Print to terminal
+        function print(text, className = '') {
+            const line = document.createElement('div');
+            line.className = `output-line ${className}`;
+            line.innerHTML = text;
+            outputContainer.appendChild(line);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // Command handler
+        async function handleCommand(cmdString) {
+            const args = cmdString.trim().split(/\s+/);
+            const cmd = args[0].toLowerCase();
+
+            print(`<span class="prompt">datisa@devkit:~$</span> ${cmdString}`);
+
+            if (!cmd) return;
+
+            switch (cmd) {
+                case 'help':
+                    print('Available commands:');
+                    print('  <span class="warning">cp guidv4</span>    - Generate and copy a standard UUID v4');
+                    print('  <span class="warning">cp guidv7</span>    - Generate and copy a time-sorted UUID v7');
+                    print('  <span class="warning">cp timestamp</span> - Generate and copy current epoch timestamp');
+                    print('  <span class="warning">cp lorem</span>     - Generate and copy placeholder text');
+                    print('  <span class="warning">clear</span>        - Clear the terminal output');
+                    break;
+                
+                case 'clear':
+                    outputContainer.innerHTML = '';
+                    break;
+
+                case 'cp':
+                    const target = args[1]?.toLowerCase();
+                    let generatedData = '';
+
+                    if (target === 'guidv4') {
+                        generatedData = generateUUIDv4();
+                    } else if (target === 'guidv7') {
+                        generatedData = generateUUIDv7();
+                    } else if (target === 'timestamp') {
+                        generatedData = Date.now().toString();
+                    } else if (target === 'lorem') {
+                        generatedData = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+                    } else {
+                        print(`cp: missing or invalid target. Try 'help' to see valid targets.`, 'error');
+                        return;
+                    }
+
+                    const success = await copyToClipboard(generatedData);
+                    if (success) {
+                        print(`[${generatedData}]`, 'system');
+                        print(`✓ Copied to clipboard!`, 'success');
+                    } else {
+                        print(`Failed to copy to clipboard. Permission denied.`, 'error');
+                        print(`Value: ${generatedData}`); // Print it anyway so they can manual copy
+                    }
+                    break;
+
+                default:
+                    print(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
+            }
+        }
+
+        // Listen for Enter key
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = this.value;
+                this.value = '';
+                handleCommand(cmd);
+            }
+        });
+    </script>
+</body>
+</html>
