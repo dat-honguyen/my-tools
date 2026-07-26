@@ -28,6 +28,13 @@ module.exports = withNativeFederation({
       singleton: true,
       strictVersion: true,
       requiredVersion: 'auto',
+      // The "ignoreUnusedDeps" optimization (on by default) prunes any
+      // shared entry it can't find a literal import for. It never finds
+      // 'react/jsx-runtime' because nothing in our source imports it by
+      // name — esbuild's automatic JSX transform injects that import after
+      // the static usage scan runs. `includeSecondaries` exempts this entry
+      // from that pruning so it survives into remoteEntry.json/importmap.json.
+      includeSecondaries: true,
     },
   },
 });
