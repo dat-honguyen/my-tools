@@ -19,7 +19,8 @@
           "dev": true
         }
       },
-      "defaultConfiguration": "production"
+      "defaultConfiguration": "production",
+      "outputs": ["{workspaceRoot}/dist/coming-soon"]
     },
     "serve": {
       "executor": "@angular-architects/native-federation:build",
