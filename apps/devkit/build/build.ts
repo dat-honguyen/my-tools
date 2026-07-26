@@ -65,11 +65,14 @@ async function run() {
       // those to `*.production.js` (no `.min`), so the default plugin fails
       // to resolve them. React's own `index.js` already branches on
       // `NODE_ENV` correctly, so no framework-specific file replacement is
-      // needed here. (needsCommonJsPlugin is intentionally not enabled: it
-      // doesn't fix named-export synthesis for federation-shared packages —
-      // see the comment in federation.config.js and the default-import
-      // usage in Terminal.tsx/register.tsx.)
-      frameworks: [],
+      // needed here. needsCommonJsPlugin doesn't fix named-export synthesis
+      // for federation-shared packages (see federation.config.js and the
+      // default-import usage in Terminal.tsx/register.tsx) — we no longer
+      // rely on that at all — but it's still needed for dev-mode (--serve)
+      // builds, where react-dom/client's internal `require('react')` calls
+      // otherwise get left as literal runtime `require()` (no such global in
+      // a browser) instead of being converted to a proper import.
+      frameworks: [{ name: 'react-esm-interop', needsCommonJsPlugin: true }],
     },
   });
 
