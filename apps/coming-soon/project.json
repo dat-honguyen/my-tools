@@ -1,0 +1,83 @@
+{
+  "name": "coming-soon",
+  "root": "apps/coming-soon",
+  "sourceRoot": "apps/coming-soon/src",
+  "projectType": "application",
+  "prefix": "cs",
+  "targets": {
+    "build": {
+      "executor": "@angular-architects/native-federation:build",
+      "options": {
+        "cacheExternalArtifacts": true
+      },
+      "configurations": {
+        "production": {
+          "target": "coming-soon:esbuild:production"
+        },
+        "development": {
+          "target": "coming-soon:esbuild:development",
+          "dev": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-architects/native-federation:build",
+      "options": {
+        "target": "coming-soon:serve-original:development",
+        "rebuildDelay": 500,
+        "cacheExternalArtifacts": true,
+        "dev": true,
+        "devServer": true,
+        "port": 0
+      }
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "buildTarget": "coming-soon:esbuild:development"
+      }
+    },
+    "esbuild": {
+      "executor": "@angular/build:application",
+      "options": {
+        "browser": "apps/coming-soon/src/main.ts",
+        "tsConfig": "apps/coming-soon/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/coming-soon/public"
+          }
+        ],
+        "styles": ["apps/coming-soon/src/styles.css"],
+        "polyfills": ["es-module-shims"]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            { "type": "initial", "maximumWarning": "500kB", "maximumError": "1MB" },
+            { "type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB" }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-original": {
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": { "buildTarget": "coming-soon:esbuild:production" },
+        "development": { "buildTarget": "coming-soon:esbuild:development" }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4203
+      }
+    }
+  }
+}
