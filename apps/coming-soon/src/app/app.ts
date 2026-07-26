@@ -4,5 +4,6 @@ import { Component } from '@angular/core';
   selector: 'cs-root',
   imports: [],
   templateUrl: './app.html',
+  styleUrl: './app.css',
 })
 export class App {}
