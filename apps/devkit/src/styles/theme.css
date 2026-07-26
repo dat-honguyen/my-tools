@@ -1,4 +1,14 @@
-:root {
+/* `:host` (not `:root`) so these custom properties are scoped to this
+   shadow tree instead of leaking onto / colliding with the host page's
+   own `:root` design tokens — see `register.tsx`, which renders into a
+   shadow root specifically to keep this stylesheet self-contained. */
+:host {
+  display: block;
+  min-height: 100%;
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  background: var(--color-bg);
+
   --color-bg: #0f172a;
   --color-surface: #1e293b;
   --color-border: rgba(148, 163, 184, 0.22);
@@ -12,16 +22,11 @@
   --font-mono: 'Fira Code', 'JetBrains Mono', Consolas, Monaco, monospace;
 }
 
+/* Scoped to elements inside this shadow tree only — a shadow root's
+   <style> never affects the light DOM, so this can't leak the reset
+   onto the host document like a global `*` selector normally would. */
 * {
   box-sizing: border-box;
-}
-
-dk-devkit-app {
-  display: block;
-  min-height: 100%;
-  font-family: var(--font-mono);
-  color: var(--color-text);
-  background: var(--color-bg);
 }
 
 .devkit-terminal {

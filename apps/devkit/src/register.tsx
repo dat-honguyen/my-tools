@@ -7,15 +7,33 @@ import { createRoot, type Root } from 'react-dom/client';
 // import makes the dependency visible so it's actually shared/externalized
 // and gets an import-map entry (verified via `dist/devkit/importmap.json`).
 import 'react/jsx-runtime';
-import './styles/theme.css';
-import './styles/tool-panel.css';
+// `build.ts` uses esbuild's `text` loader for `.css` (see the comment
+// there for why: the `css` loader emits sibling `.css` files but injects
+// no `<link>`/`<style>` reference anywhere, so nothing ever loads them).
+// Importing the raw text lets us inject it ourselves as a `<style>`
+// element inside this element's shadow root below.
+import theme from './styles/theme.css';
+import toolPanel from './styles/tool-panel.css';
 import { App } from './App';
 
 class DevkitElement extends HTMLElement {
   private root?: Root;
 
   connectedCallback(): void {
-    this.root = createRoot(this);
+    // Render into a shadow root (rather than `this` directly) so the
+    // injected stylesheet's `:root`/`*`/custom-property rules are scoped
+    // to this element instead of leaking onto — or colliding with — the
+    // host page's own identically-named design tokens (see theme.css).
+    const shadow = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
+
+    const style = document.createElement('style');
+    style.textContent = `${theme}\n${toolPanel}`;
+    shadow.appendChild(style);
+
+    const container = document.createElement('div');
+    shadow.appendChild(container);
+
+    this.root = createRoot(container);
     this.root.render(<App />);
   }
 
