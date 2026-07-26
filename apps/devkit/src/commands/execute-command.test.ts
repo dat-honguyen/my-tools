@@ -11,7 +11,16 @@ const echo: CommandSpec = {
   },
 };
 
-const fixtures = [echo];
+const echoWithCopyText: CommandSpec = {
+  id: 'echocopy',
+  summary: 'Echo text back with a separate copyText',
+  args: [{ name: 'text', kind: 'string' }],
+  run(args) {
+    return { text: `display: ${args.join(' ')}`, copyText: args.join(' '), kind: 'success' };
+  },
+};
+
+const fixtures = [echo, echoWithCopyText];
 
 describe('executeCommand', () => {
   it('returns no output for blank input', async () => {
@@ -43,5 +52,11 @@ describe('executeCommand', () => {
   it('does not set copyText when the command errors', async () => {
     const result = await executeCommand('cp echo', fixtures);
     expect(result.copyText).toBeUndefined();
+  });
+
+  it('prefers a result-provided copyText over its display text', async () => {
+    const result = await executeCommand('cp echocopy hi there', fixtures);
+    expect(result.output).toEqual([{ text: 'display: hi there', copyText: 'hi there', kind: 'success' }]);
+    expect(result.copyText).toBe('hi there');
   });
 });

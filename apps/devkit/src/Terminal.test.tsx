@@ -49,6 +49,17 @@ describe('Terminal', () => {
     expect(input).toHaveValue('hash');
   });
 
+  it('lists candidates on Tab when the prefix is ambiguous, without clearing input', async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    const input = screen.getByRole('textbox');
+    // 'guidv' matches both guidv4 and guidv7 — ambiguous, so Tab should list them.
+    await user.type(input, 'guidv');
+    await user.keyboard('{Tab}');
+    expect(screen.getByText(/guidv4\s+guidv7/)).toBeInTheDocument();
+    expect(input).toHaveValue('guidv');
+  });
+
   it('cycles submitted history with ArrowUp/ArrowDown', async () => {
     const user = userEvent.setup();
     render(<Terminal />);
@@ -73,6 +84,17 @@ describe('Terminal', () => {
     await user.type(screen.getByRole('textbox'), 'cp case camel "hello world"{Enter}');
     expect(await screen.findByText('✓ Copied to clipboard!')).toBeInTheDocument();
     expect(writeText).toHaveBeenCalledWith('helloWorld');
+    vi.unstubAllGlobals();
+  });
+
+  it('`cp date` copies only the ISO string, not the full multi-line breakdown', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const user = userEvent.setup();
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+    render(<Terminal />);
+    await user.type(screen.getByRole('textbox'), 'cp date 2024-01-15T12:00:00Z{Enter}');
+    expect(await screen.findByText('✓ Copied to clipboard!')).toBeInTheDocument();
+    expect(writeText).toHaveBeenCalledWith('2024-01-15T12:00:00.000Z');
     vi.unstubAllGlobals();
   });
 });

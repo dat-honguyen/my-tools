@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { COMMANDS } from './commands';
 import { executeCommand } from './commands/execute-command';
-import { getSuggestion } from './commands/get-suggestion';
+import { getCompletionCandidates, getSuggestion } from './commands/get-suggestion';
 import type { CommandResult } from './commands/types';
 import { copyToClipboard } from './shared/clipboard';
 
@@ -112,7 +112,15 @@ export function Terminal() {
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Tab') {
       event.preventDefault();
-      if (suggestion) setValue(value + suggestion);
+      if (suggestion) {
+        setValue(value + suggestion);
+      } else if (value !== '') {
+        const candidates = getCompletionCandidates(value, COMMANDS);
+        if (candidates.length > 1) {
+          appendOutput({ text: `${PROMPT} ${value}`, kind: 'echo' });
+          appendOutput({ text: candidates.join('  '), kind: 'system' });
+        }
+      }
       return;
     }
     if (event.key === 'Enter') {

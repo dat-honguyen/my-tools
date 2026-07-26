@@ -8,6 +8,8 @@ export interface ArgSpec {
 export interface CommandResult {
   text: string;
   kind: 'success' | 'error' | 'system';
+  /** When set, `cp <command>` copies this instead of `text` (e.g. `date` displays a multi-line breakdown but copies only the ISO string). */
+  copyText?: string;
 }
 
 export interface CommandSpec {

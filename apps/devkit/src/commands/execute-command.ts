@@ -36,6 +36,6 @@ export async function executeCommand(input: string, commands: CommandSpec[]): Pr
   const result = await spec.run(args);
   return {
     output: [result],
-    copyText: copy && result.kind === 'success' ? result.text : undefined,
+    copyText: copy && result.kind === 'success' ? (result.copyText ?? result.text) : undefined,
   };
 }

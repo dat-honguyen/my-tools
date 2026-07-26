@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getSuggestion } from './get-suggestion';
+import { getCompletionCandidates, getSuggestion } from './get-suggestion';
 import type { CommandSpec } from './types';
 
 const hashLike: CommandSpec = {
@@ -41,5 +41,31 @@ describe('getSuggestion', () => {
 
   it('returns null past the last enum arg position', () => {
     expect(getSuggestion('hash md5 hel', [], commands)).toBeNull();
+  });
+});
+
+describe('getCompletionCandidates', () => {
+  it('returns an empty array for empty input', () => {
+    expect(getCompletionCandidates('', commands)).toEqual([]);
+  });
+
+  it('lists every command id matching an ambiguous prefix', () => {
+    expect(getCompletionCandidates('ha', commands)).toEqual(['hash', 'hashify']);
+  });
+
+  it('still returns a single-element array for an unambiguous prefix', () => {
+    expect(getCompletionCandidates('hashi', commands)).toEqual(['hashify']);
+  });
+
+  it('returns an empty array when nothing matches', () => {
+    expect(getCompletionCandidates('zz', commands)).toEqual([]);
+  });
+
+  it('lists every enum choice matching an ambiguous arg prefix', () => {
+    expect(getCompletionCandidates('hash s', commands)).toEqual(['sha1', 'sha256']);
+  });
+
+  it('returns an empty array for an unknown command', () => {
+    expect(getCompletionCandidates('nope x', commands)).toEqual([]);
   });
 });

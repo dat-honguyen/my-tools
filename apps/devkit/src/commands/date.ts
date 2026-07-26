@@ -12,7 +12,11 @@ export const date: CommandSpec = {
     const [input = '', timeZone = 'UTC'] = args;
     try {
       const result = convertDateTime(input, timeZone);
-      return { text: `${result.iso}\n${result.zoned} (${timeZone})\n${result.offset}`, kind: 'success' };
+      return {
+        text: `${result.iso}\n${result.zoned} (${timeZone})\n${result.offset}`,
+        copyText: result.iso,
+        kind: 'success',
+      };
     } catch (err) {
       return { text: err instanceof Error ? err.message : 'Something went wrong.', kind: 'error' };
     }

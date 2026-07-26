@@ -34,3 +34,31 @@ export function getSuggestion(input: string, history: string[], commands: Comman
   }
   return null;
 }
+
+/**
+ * All candidates matching the token currently being typed — used when
+ * `getSuggestion` returns null because the prefix is ambiguous (2+ matches),
+ * so the terminal can list them instead of staying silent. Ignores history:
+ * this only ever looks at command ids or enum choices.
+ */
+export function getCompletionCandidates(input: string, commands: CommandSpec[]): string[] {
+  if (input === '') return [];
+
+  const hasSpace = input.includes(' ');
+  if (!hasSpace) {
+    const ids = [...commands.map((c) => c.id), ...BUILTIN_IDS];
+    return ids.filter((id) => id.startsWith(input));
+  }
+
+  const tokens = input.split(' ');
+  const spec = commands.find((c) => c.id === tokens[0]);
+  if (!spec) return [];
+
+  const argIndex = tokens.length - 2;
+  const argSpec = spec.args[argIndex];
+  const currentTyped = tokens[tokens.length - 1];
+  if (argSpec?.kind === 'enum' && argSpec.choices) {
+    return argSpec.choices.filter((choice) => choice.startsWith(currentTyped));
+  }
+  return [];
+}

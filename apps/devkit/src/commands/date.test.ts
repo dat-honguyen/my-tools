@@ -15,6 +15,11 @@ describe('date command', () => {
     expect(result.text).toContain('(America/New_York)');
   });
 
+  it('sets copyText to just the ISO string, even for a non-UTC timezone', async () => {
+    const result = await date.run(['2024-01-15T12:00:00Z', 'America/New_York']);
+    expect(result.copyText).toBe('2024-01-15T12:00:00.000Z');
+  });
+
   it('errors on an invalid date', async () => {
     const result = await date.run(['not-a-date']);
     expect(result.kind).toBe('error');
