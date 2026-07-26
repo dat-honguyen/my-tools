@@ -36,10 +36,21 @@ jobs:
           mkdir -p public
           for project in $PROJECTS; do
             npx nx build "$project"
+            # Angular-style builds (e.g. coming-soon) write to
+            # dist/$project/browser at the repo root. esbuild-style builds
+            # (e.g. devkit) run from apps/$project with their own
+            # `outputPath: 'dist/devkit'`, landing at
+            # apps/$project/dist/$project instead — see
+            # apps/devkit/build/build.ts and apps/devkit/project.json.
             if [ -d "dist/$project/browser" ]; then
               cp -r "dist/$project/browser" "public/$project"
-            else
+            elif [ -d "dist/$project" ]; then
               cp -r "dist/$project" "public/$project"
+            elif [ -d "apps/$project/dist/$project" ]; then
+              cp -r "apps/$project/dist/$project" "public/$project"
+            else
+              echo "::error::Could not find build output for $project"
+              exit 1
             fi
           done
 
