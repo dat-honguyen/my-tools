@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { generateQrAscii } from './qrcode.util';
 
 describe('generateQrAscii', () => {
-  it('renders a QR code as a rectangular grid of block/space cell pairs', () => {
+  it('renders a compact rectangular grid using half-block characters', () => {
     const ascii = generateQrAscii('hello');
     const lines = ascii.split('\n');
-    expect(lines.length).toBeGreaterThan(10);
-    expect(lines.every((line) => /^(██|  )+$/.test(line))).toBe(true);
+    expect(lines.length).toBeGreaterThan(5);
+    expect(lines.every((line) => /^[█▀▄ ]+$/.test(line))).toBe(true);
     expect(new Set(lines.map((line) => line.length)).size).toBe(1);
   });
 
