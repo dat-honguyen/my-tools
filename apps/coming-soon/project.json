@@ -33,10 +33,7 @@
       }
     },
     "test": {
-      "executor": "@angular/build:unit-test",
-      "options": {
-        "buildTarget": "coming-soon:esbuild:development"
-      }
+      "executor": "@angular/build:unit-test"
     },
     "esbuild": {
       "executor": "@angular/build:application",
