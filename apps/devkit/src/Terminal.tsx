@@ -132,39 +132,41 @@ export function Terminal() {
   }
 
   return (
-    <div className="devkit-terminal" onClick={focusInput}>
-      <div className="devkit-terminal-header">
-        <div className="devkit-window-controls">
-          <div className="devkit-control close" />
-          <div className="devkit-control minimize" />
-          <div className="devkit-control maximize" />
-        </div>
-        <div className="devkit-terminal-title">datisa.dev - Universal DevKit</div>
-      </div>
-      <div className="devkit-output" ref={outputRef}>
-        {output.map((line, index) => (
-          <div key={index} className={`output-line ${line.kind}`}>
-            {line.text}
+    <div className="devkit-shell">
+      <div className="devkit-terminal" onClick={focusInput}>
+        <div className="devkit-terminal-header">
+          <div className="devkit-window-controls">
+            <div className="devkit-control close" />
+            <div className="devkit-control minimize" />
+            <div className="devkit-control maximize" />
           </div>
-        ))}
-        <div className="input-line">
-          <span className="prompt">{PROMPT}</span>
-          <div className="command-input-wrapper">
-            <div className="ghost-suggestion" aria-hidden="true">
-              <span className="ghost-typed">{value}</span>
-              <span className="ghost-rest">{suggestion ?? ''}</span>
+          <div className="devkit-terminal-title">datisa.dev - Universal DevKit</div>
+        </div>
+        <div className="devkit-output" ref={outputRef}>
+          {output.map((line, index) => (
+            <div key={index} className={`output-line ${line.kind}`}>
+              {line.text}
             </div>
-            <input
-              ref={inputRef}
-              type="text"
-              className="command-input"
-              autoComplete="off"
-              spellCheck={false}
-              autoFocus
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={onKeyDown}
-            />
+          ))}
+          <div className="input-line">
+            <span className="prompt">{PROMPT}</span>
+            <div className="command-input-wrapper">
+              <div className="ghost-suggestion" aria-hidden="true">
+                <span className="ghost-typed">{value}</span>
+                <span className="ghost-rest">{suggestion ?? ''}</span>
+              </div>
+              <input
+                ref={inputRef}
+                type="text"
+                className="command-input"
+                autoComplete="off"
+                spellCheck={false}
+                autoFocus
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={onKeyDown}
+              />
+            </div>
           </div>
         </div>
       </div>
