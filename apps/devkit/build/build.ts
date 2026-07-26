@@ -19,6 +19,11 @@ const CONTENT_TYPES: Record<string, string> = {
 function serveDist() {
   const distDir = path.join(workspaceRoot, outputPath);
   const server = http.createServer((req, res) => {
+    // ../portfolio's dev server (ng serve, a different origin/port) fetches
+    // remoteEntry.json and the shared/exposed bundles from here at runtime —
+    // without this, the browser blocks those as cross-origin requests.
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
     const reqPath = (req.url ?? '/').split('?')[0];
     const filePath = path.join(distDir, decodeURIComponent(reqPath === '/' ? '/index.html' : reqPath));
     fs.readFile(filePath, (err, data) => {
