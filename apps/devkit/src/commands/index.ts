@@ -1,3 +1,4 @@
+import { back } from './back';
 import { guidv4 } from './guidv4';
 import { guidv7 } from './guidv7';
 import { hash } from './hash';
@@ -16,6 +17,7 @@ import { useragent } from './useragent';
 import type { CommandSpec } from './types';
 
 export const COMMANDS: CommandSpec[] = [
+  back,
   guidv4,
   guidv7,
   hash,
