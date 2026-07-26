@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
+import * as esbuild from 'esbuild';
 import { runEsBuildBuilder } from '@softarc/native-federation-esbuild';
 
 const workspaceRoot = path.join(__dirname, '..');
@@ -62,6 +63,22 @@ async function run() {
       // needed here.
       frameworks: [],
     },
+  });
+
+  // native-federation's `entryPoints` option only feeds its "used shared
+  // deps" analysis (see normalize-options.js) — it does not emit a bundle.
+  // index.html's <script src="./main.js"> needs an actual standalone bundle
+  // of the host entry point, built separately here.
+  await esbuild.build({
+    entryPoints: [path.join(workspaceRoot, 'src/main.ts')],
+    outfile: path.join(workspaceRoot, outputPath, 'main.js'),
+    bundle: true,
+    platform: 'browser',
+    format: 'esm',
+    sourcemap: isServe,
+    minify: !isServe,
+    loader: { '.css': 'text' },
+    define: { 'process.env.NODE_ENV': isServe ? '"development"' : '"production"' },
   });
 
   fs.copyFileSync(path.join(workspaceRoot, 'index.html'), path.join(workspaceRoot, outputPath, 'index.html'));
