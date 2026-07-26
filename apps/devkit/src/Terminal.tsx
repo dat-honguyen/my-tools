@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { COMMANDS } from './commands';
 import { executeCommand } from './commands/execute-command';
 import { getCompletionCandidates, getSuggestion } from './commands/get-suggestion';
+import { highlightInput } from './commands/highlight-input';
 import type { CommandResult } from './commands/types';
 import { copyToClipboard } from './shared/clipboard';
 
@@ -10,6 +11,23 @@ const HISTORY_LIMIT = 50;
 const PROMPT = 'datisa@devkit:~$';
 
 type OutputLine = CommandResult | { text: string; kind: 'echo' | 'warning' };
+
+function renderHighlighted(text: string, highlights: [number, number][] | undefined) {
+  if (!highlights || highlights.length === 0) return text;
+  const nodes: React.ReactNode[] = [];
+  let cursor = 0;
+  highlights.forEach(([start, end], i) => {
+    if (start > cursor) nodes.push(text.slice(cursor, start));
+    nodes.push(
+      <mark key={i} className="output-highlight">
+        {text.slice(start, end)}
+      </mark>,
+    );
+    cursor = end;
+  });
+  if (cursor < text.length) nodes.push(text.slice(cursor));
+  return nodes;
+}
 
 function loadHistory(): string[] {
   try {
@@ -108,6 +126,7 @@ export function Terminal() {
   }
 
   const suggestion = getSuggestion(value, history, COMMANDS);
+  const inputSegments = highlightInput(value, COMMANDS);
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Tab') {
@@ -152,14 +171,18 @@ export function Terminal() {
       <div className="devkit-output" ref={outputRef}>
         {output.map((line, index) => (
           <div key={index} className={`output-line ${line.kind}`}>
-            {line.text}
+            {renderHighlighted(line.text, 'highlights' in line ? line.highlights : undefined)}
           </div>
         ))}
         <div className="input-line">
           <span className="prompt">{PROMPT}</span>
           <div className="command-input-wrapper">
             <div className="ghost-suggestion" aria-hidden="true">
-              <span className="ghost-typed">{value}</span>
+              {inputSegments.map((segment, i) => (
+                <span key={i} className={segment.className}>
+                  {segment.text}
+                </span>
+              ))}
               <span className="ghost-rest">{suggestion ?? ''}</span>
             </div>
             <input

@@ -10,6 +10,8 @@ export interface CommandResult {
   kind: 'success' | 'error' | 'system';
   /** When set, `cp <command>` copies this instead of `text` (e.g. `date` displays a multi-line breakdown but copies only the ISO string). */
   copyText?: string;
+  /** [start, end) index ranges within `text` to visually highlight (e.g. regex matches). */
+  highlights?: [number, number][];
 }
 
 export interface CommandSpec {

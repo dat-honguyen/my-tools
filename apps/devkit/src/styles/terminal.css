@@ -30,6 +30,13 @@
   color: var(--color-text);
 }
 
+.output-highlight {
+  background: var(--color-warning);
+  color: var(--color-bg);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
 .input-line {
   display: flex;
   align-items: center;
@@ -56,8 +63,16 @@
   font: inherit;
 }
 
-.ghost-typed {
-  color: transparent;
+.token-command {
+  color: var(--color-success);
+}
+
+.token-modifier {
+  color: var(--color-warning);
+}
+
+.token-unknown {
+  color: var(--color-error);
 }
 
 .ghost-rest {
@@ -68,7 +83,10 @@
   position: relative;
   background: transparent;
   border: none;
-  color: var(--color-text);
+  /* Rendered text is transparent — the colored/syntax-highlighted overlay in
+     .ghost-suggestion (same characters, same position) is what's visible.
+     This input only supplies the caret, selection, and keystroke handling. */
+  color: transparent;
   font: inherit;
   font-size: 1rem;
   width: 100%;

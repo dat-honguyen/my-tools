@@ -97,4 +97,33 @@ describe('Terminal', () => {
     expect(writeText).toHaveBeenCalledWith('2024-01-15T12:00:00.000Z');
     vi.unstubAllGlobals();
   });
+
+  it('runs the new slug/password/useragent tools', async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    const input = screen.getByRole('textbox');
+    await user.type(input, 'slug "Hello World!"{Enter}');
+    expect(screen.getByText('hello-world')).toBeInTheDocument();
+    await user.type(input, 'password 12 numeric{Enter}');
+    expect(screen.getAllByText(/^\d{12}$/).length).toBeGreaterThan(0);
+    await user.type(input, 'useragent{Enter}');
+    expect(screen.getByText(/^Browser: /)).toBeInTheDocument();
+  });
+
+  it('highlights regex matches within the tested text in the output', async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    await user.type(screen.getByRole('textbox'), 'regex \\d+ g "a1 b22"{Enter}');
+    const mark = document.querySelector('.output-highlight');
+    expect(mark).not.toBeNull();
+    expect(mark?.textContent).toBe('1');
+  });
+
+  it('colors a known command word while typing', async () => {
+    const user = userEvent.setup();
+    render(<Terminal />);
+    await user.type(screen.getByRole('textbox'), 'guidv4');
+    const token = document.querySelector('.token-command');
+    expect(token?.textContent).toBe('guidv4');
+  });
 });

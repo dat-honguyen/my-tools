@@ -9,6 +9,10 @@ import { jsonCommand } from './json';
 import { regex } from './regex';
 import { date } from './date';
 import { epoch } from './epoch';
+import { qrcode } from './qrcode';
+import { password } from './password';
+import { slug } from './slug';
+import { useragent } from './useragent';
 import type { CommandSpec } from './types';
 
 export const COMMANDS: CommandSpec[] = [
@@ -23,4 +27,8 @@ export const COMMANDS: CommandSpec[] = [
   regex,
   date,
   epoch,
+  qrcode,
+  password,
+  slug,
+  useragent,
 ];
